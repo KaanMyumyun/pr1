@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  web:
+    image: kstkaan/bgapp-web
+
+    deploy:
+      replicas: 5
+
+    ports:
+      - "8080:80"
+
+    volumes:
+      - "/home/vagrant/pr1/web:/var/www/html:ro"
+
+    networks:
+      - app-network
+
+  db:
+    image: kstkaan/bgapp-db
+
+    networks:
+      - app-network
+
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+
+    secrets:
+      - db_root_password
+
+secrets:
+  db_root_password:
+    external: true
+
+networks:
+  app-network:
